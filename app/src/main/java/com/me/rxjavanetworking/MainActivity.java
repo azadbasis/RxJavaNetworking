@@ -11,11 +11,15 @@ import com.me.rxjavanetworking.util.DataSource;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+
+    CompositeDisposable disposables = new CompositeDisposable();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         taskObservable.subscribe(new Observer<Task>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                disposables.add(d);
             }
 
             @Override
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        disposables.clear();
     }
 
 }
